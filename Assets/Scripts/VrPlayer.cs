@@ -9,6 +9,8 @@ public class VrPlayer : MonoBehaviour {
     private Item itemOnHand;
     private CameraSystem cameraSystem;
     private double thresholdAngle = -25;
+    private float prvTime;
+    private const float refreshTime = 5.0f;
     private static VrPlayer instance;
 
     public static VrPlayer getInstance() {
@@ -26,22 +28,41 @@ public class VrPlayer : MonoBehaviour {
         itemList = new List<Item>();
         cameraSystem = GameObject.Find ("CameraSystem").GetComponent<CameraSystem>();
 	}
-
-    // Update is called once per frame
-    void Update() {
+	
+	// Update is called once per frame
+	void Update () {
         double x = Camera.main.transform.eulerAngles.x;
         // let the angle between -180 to 180
         if (x > 180) { x = x - 360.0; }
-        if (touchUI.getIsDisplayed() == false && x <= thresholdAngle && GvrViewer.Instance.Triggered)
-        {
-            touchUI.DisplayUI(x,3); // the number 3 is for temp test, need to be fix
+        if (touchUI.getIsDisplayed() == false && x <= thresholdAngle && GvrViewer.Instance.Triggered) {
+            touchUI.DisplayUI(x, 3); // the number 3 is for temp test, need to be fix
         }
-    }
+
+        // get camera views
+        if (cameraSystem.isTurnedOn ()) {
+            if (Time.time - prvTime >= refreshTime) {
+                Sprite[] images = cameraSystem.getImage ();
+                for(int i = 0; i < images.Length; i++) {
+                    send ("camera " + i, images[i]);
+                }
+                prvTime = Time.time;
+            }
+        }
+	}
+
     public void send(string type, string content) {
     }
     public void send(string type, Sprite content) {
     }
     public void receive(string type, string content) {
+        switch (type) {
+        case "camera":
+            if (content == "on") {
+                cameraSystem.turnOn ();
+                prvTime = Time.time;
+            }
+            break;
+        }
     }
     // Autowalk.cs provides the behavior 
     /*
@@ -52,7 +73,7 @@ public class VrPlayer : MonoBehaviour {
     private void stop() {
     }
     */
-    private void pick(Item item) {
+    public void pick(Item item) {
         itemList.Add (item);
         item.gameObject.transform.SetParent(transform);
         item.gameObject.SetActive (false);
