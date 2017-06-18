@@ -4,19 +4,19 @@ using UnityEngine;
 
 public abstract class Item : MonoBehaviour {
 
-    private bool pickable;
-    private Dictionary<GameObject, UseStrategy> interactingItems;
-    private VrPlayer vrPlayer;
+    protected bool pickable;
+    protected Dictionary<GameObject, UseStrategy> interactingItems;
+    protected VrPlayer vrPlayer;
 
 	// Use this for initialization
-	void Start () {
+	public virtual void Start () {
         vrPlayer = VrPlayer.getInstance ();
         interactingItems = new Dictionary<GameObject, UseStrategy> ();
         pickable = false;
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	public virtual void Update () {
 		
 	}
 
@@ -31,7 +31,7 @@ public abstract class Item : MonoBehaviour {
     }
     public virtual void use() {
     }
-    public void trigger() {
+    public virtual void trigger() {
         vrPlayer.interact (gameObject);
     }
     public virtual void interact() {

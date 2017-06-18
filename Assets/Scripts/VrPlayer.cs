@@ -7,6 +7,8 @@ public class VrPlayer : MonoBehaviour {
     private List<Item> itemList;
     private Item itemOnHand;
     private CameraSystem cameraSystem;
+    private float prvTime;
+    private const float refreshTime = 5.0f;
     private static VrPlayer instance;
 
     public static VrPlayer getInstance() {
@@ -26,7 +28,16 @@ public class VrPlayer : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		// TODO
+        // get camera views
+        if (cameraSystem.isTurnedOn ()) {
+            if (Time.time - prvTime >= refreshTime) {
+                Sprite[] images = cameraSystem.getImage ();
+                for(int i = 0; i < images.Length; i++) {
+                    send ("camera " + i, images[i]);
+                }
+                prvTime = Time.time;
+            }
+        }
 	}
 
     public void send(string type, string content) {
@@ -34,12 +45,20 @@ public class VrPlayer : MonoBehaviour {
     public void send(string type, Sprite content) {
     }
     public void receive(string type, string content) {
+        switch (type) {
+        case "camera":
+            if (content == "on") {
+                cameraSystem.turnOn ();
+                prvTime = Time.time;
+            }
+            break;
+        }
     }
     private void walk() {
     }
     private void stop() {
     }
-    private void pick(Item item) {
+    public void pick(Item item) {
         itemList.Add (item);
         item.gameObject.transform.SetParent(transform);
         item.gameObject.SetActive (false);

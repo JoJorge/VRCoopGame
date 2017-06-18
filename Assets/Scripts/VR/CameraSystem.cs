@@ -4,13 +4,22 @@ using UnityEngine;
 
 public class CameraSystem : MonoBehaviour {
 
+    private bool isOn;
+
 	// Use this for initialization
 	void Start () {
-		
+        isOn = false;
 	}
 	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    public bool isTurnedOn() {
+        return isOn;
+    }
+    public void turnOn() {
+        isOn = true;
+    }
+    public Sprite[] getImage() {
+        // TODO
+        // get images in all the cameras
+        return new Sprite[6];
+    }
 }
