@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PcPlayer : MonoBehaviour {
 
+    private NetworkBridge bridge;
     private GameObject slideBar;
     private GameObject mainScreen;
     private App currentApp;
@@ -21,6 +22,7 @@ public class PcPlayer : MonoBehaviour {
         if (getInstance () != this) {
             Destroy (this);
         }
+        bridge = FindObjectOfType (typeof(NetworkBridge)) as NetworkBridge;
         apps = new List<App>();
         // get all apps
 	}
@@ -35,9 +37,11 @@ public class PcPlayer : MonoBehaviour {
     }
 
     public void send(string type, string content) {
-        // send message to VrPlayer
+        bridge.CmdSendToVr(type, content);
     }
     public void receive<T>(string type, T content) {
+        Debug.Log ("PC received");
+
         // receive message from VrPlayer
         int idx = type.IndexOf(" ");    
         string typeName = type.Substring(0, idx);

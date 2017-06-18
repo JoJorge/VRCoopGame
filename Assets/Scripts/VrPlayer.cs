@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class VrPlayer : MonoBehaviour {
 
+    private NetworkBridge bridge;
     private List<Item> itemList;
     private Item itemOnHand;
     private CameraSystem cameraSystem;
@@ -22,6 +23,7 @@ public class VrPlayer : MonoBehaviour {
         if (getInstance () != this) {
             Destroy (this);
         }
+        bridge = FindObjectOfType (typeof(NetworkBridge)) as NetworkBridge;
         itemList = new List<Item>();
         cameraSystem = GameObject.Find ("CameraSystem").GetComponent<CameraSystem>();
 	}
@@ -41,10 +43,14 @@ public class VrPlayer : MonoBehaviour {
 	}
 
     public void send(string type, string content) {
+        bridge.CmdSendToPcStr(type, content);
     }
     public void send(string type, Sprite content) {
+        //bridge.CmdSendToPcImg(type, content);
     }
     public void receive(string type, string content) {
+        Debug.Log ("VR received");
+
         switch (type) {
         case "camera":
             if (content == "on") {
