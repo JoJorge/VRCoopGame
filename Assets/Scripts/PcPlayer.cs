@@ -6,6 +6,7 @@ public class PcPlayer : MonoBehaviour {
 
     private GameObject slideBar;
     private GameObject mainScreen;
+	[SerializeField]
     private App currentApp;
     private List<App> apps;
     private static PcPlayer instance;
@@ -53,9 +54,14 @@ public class PcPlayer : MonoBehaviour {
         // show the icon of the app in the side bar of the scene
     }
     public void showInMainScreen(App app) {
-        hideCurrentApp ();
-        currentApp = app;
-        app.show ();
+		if (app == currentApp) {
+			app.hide ();
+			currentApp = null;
+		} else {
+			hideCurrentApp ();
+			currentApp = app;
+			app.show ();
+		}
     }
     private void hideCurrentApp() {
         if (currentApp != null) {

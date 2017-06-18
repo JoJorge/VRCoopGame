@@ -5,19 +5,23 @@ using UnityEngine;
 public abstract class App : MonoBehaviour {
 
     private GameObject icon;
+	[SerializeField]
     private GameObject window;
     private PcPlayer pcPlayer;
     private bool activated;
     private Queue<Data> outputBuffer;
 
 	// Use this for initialization
-	void Start () {
+	public void Start () {
         pcPlayer = PcPlayer.getInstance ();
         outputBuffer = new Queue<Data> ();
+		icon = transform.Find (name + "_icon").gameObject;
+		window = transform.Find (name + "_window").gameObject;
+		hide();
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	public void Update () {
 		
 	}
 
@@ -62,9 +66,10 @@ public abstract class App : MonoBehaviour {
         // notify the app with important message
     }
     public void show() {
-        // show window in main screeen
-    }
+		window.SetActive (true);
+		output ();
+	}
     public void hide() {
-        // hide window in main screen
+		window.SetActive (false);
     }
 }
