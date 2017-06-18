@@ -8,6 +8,8 @@ public class Terminal : App {
 	[SerializeField]
 	private GameObject input;
 	[SerializeField]
+	private GameObject screen_input;
+	[SerializeField]
 	private InputField inputfield;
 	[SerializeField]
 	private Text screen;
@@ -19,7 +21,7 @@ public class Terminal : App {
 		base.Start ();
 		input = transform.Find ("Terminal_window").gameObject;
 		inputfield = input.GetComponentInChildren<InputField> ();
-		screen = GameObject.Find ("screen").GetComponent <UnityEngine.UI.Text>();
+		screen = input.GetComponentInChildren<Text>();
 	}
 		
 	// Update is called once per frame
@@ -41,6 +43,9 @@ public class Terminal : App {
 				}
 				now_line = now_line - delete_line_num;
 			}
+			if (echo == "clean") {
+				screen.text = "";
+			}
 		}
 	}
 	//just refresh InputField text
@@ -51,25 +56,25 @@ public class Terminal : App {
 	//handle all command
 	string command_handler(string command){
 		string echo;
-		if (command == "help\n") 
-		{
+		if (command == "help\n") {
 			echo = "Common:\n" +
-				"\t\thelp -list all command and some information.\n" +
-				"\t\texit -just exit.\n" +
-				"\t\tEvelator:\n" +
-				"\t\tgoto floor #floor_num\n" +
-				"mail list:\n" +
-				"\t\tmail open ;mailname\n" +
-				"camera system\n" +
-				"\t\tcamera on\n" +
-				"\t\tls\n" +
-				"\t\topen ;filename";
+			"\t\thelp -list all command and some information.\n" +
+			"\t\texit -just exit.\n" +
+			"\t\tEvelator:\n" +
+			"\t\tgoto floor #floor_num\n" +
+			"mail list:\n" +
+			"\t\tmail open ;mailname\n" +
+			"camera system\n" +
+			"\t\tcamera on\n" +
+			"\t\tls\n" +
+			"\t\topen ;filename";
 			now_line = now_line + 12;
-		}
-		else if(command == "camera on\n")
-		{
+		} else if (command == "camera on\n") {
 			echo = "Camera is on now.";
 			now_line = now_line + 2;
+		} else if (command == "cls\n") {
+			now_line = 0;
+			echo = "clean";
 		}
 		else
 		{

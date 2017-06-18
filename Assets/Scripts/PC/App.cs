@@ -17,6 +17,7 @@ public abstract class App : MonoBehaviour {
         outputBuffer = new Queue<Data> ();
 		icon = transform.Find (name + "_icon").gameObject;
 		window = transform.Find (name + "_window").gameObject;
+		hide();
 	}
 	
 	// Update is called once per frame
