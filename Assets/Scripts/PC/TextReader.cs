@@ -5,8 +5,9 @@ using UnityEngine;
 public class TextReader : App {
 
 	// Use this for initialization
-	void Start () {
+    override public void Start() {
 		base.Start ();
+        activate ();
 	}
 	
 	// Update is called once per frame

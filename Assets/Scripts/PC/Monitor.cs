@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Monitor : App {
-
+    
 	// Use this for initialization
-	void Start () {
+    override public void Start() {
 		base.Start ();
 	}
 	

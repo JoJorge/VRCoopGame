@@ -15,12 +15,12 @@ public class Terminal : App {
 	private int now_line = 0;
 
 	// Use this for initialization
-	void Start () {
-		base.Start ();
-		input = transform.Find ("Terminal_window").gameObject;
-		inputfield = input.GetComponentInChildren<InputField> ();
-		screen = GameObject.Find ("screen").GetComponent <UnityEngine.UI.Text>();
-	}
+    override public void Start() {
+        input = transform.Find ("Terminal_window").gameObject;
+        inputfield = input.GetComponentInChildren<InputField> ();
+        screen = GameObject.Find ("screen").GetComponent <UnityEngine.UI.Text>();
+        base.Start ();
+    }
 		
 	// Update is called once per frame
 	void Update () {
@@ -51,26 +51,29 @@ public class Terminal : App {
 	//handle all command
 	string command_handler(string command){
 		string echo;
-		if (command == "help\n") 
-		{
-			echo = "Common:\n" +
-				"\t\thelp -list all command and some information.\n" +
-				"\t\texit -just exit.\n" +
-				"\t\tEvelator:\n" +
-				"\t\tgoto floor #floor_num\n" +
-				"mail list:\n" +
-				"\t\tmail open ;mailname\n" +
-				"camera system\n" +
-				"\t\tcamera on\n" +
-				"\t\tls\n" +
-				"\t\topen ;filename";
-			now_line = now_line + 12;
-		}
-		else if(command == "camera on\n")
-		{
-			echo = "Camera is on now.";
-			now_line = now_line + 2;
-		}
+        if (command == "help\n") {
+            echo = "Common:\n" +
+            "\t\thelp -list all command and some information.\n" +
+            "\t\texit -just exit.\n" +
+            "\t\tEvelator:\n" +
+            "\t\tgoto floor #floor_num\n" +
+            "mail list:\n" +
+            "\t\tmail open ;mailname\n" +
+            "camera system\n" +
+            "\t\tcamera on\n" +
+            "\t\tls\n" +
+            "\t\topen ;filename";
+            now_line = now_line + 12;
+        }
+        else if (command == "camera on\n") {
+            echo = "Camera is on now.";
+            now_line = now_line + 2;
+        }
+        else if (command == "test\n") {
+            echo = "testing.";
+            now_line = now_line + 2;
+            send ("test", "yee");
+        }
 		else
 		{
 			echo = "Command does not exist.";

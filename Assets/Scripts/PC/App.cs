@@ -4,6 +4,7 @@ using UnityEngine;
 
 public abstract class App : MonoBehaviour {
 
+    [SerializeField]
     private GameObject icon;
 	[SerializeField]
     private GameObject window;
@@ -12,18 +13,18 @@ public abstract class App : MonoBehaviour {
     private Queue<Data> outputBuffer;
 
 	// Use this for initialization
-	public void Start () {
+    public virtual void Start () {
         pcPlayer = PcPlayer.getInstance ();
         outputBuffer = new Queue<Data> ();
 		icon = transform.Find (name + "_icon").gameObject;
 		window = transform.Find (name + "_window").gameObject;
-	}
-	
-	// Update is called once per frame
-	public void Update () {
-		
+        icon.SetActive (false);
+        hide();
 	}
 
+    public bool isActivated() {
+        return activated;
+    }
     public void input<T> (string header, T content) {
         outputBuffer.Enqueue(DataGenerator.generateDataByContent (header, content));
         if (pcPlayer.isCurrentApp (this)) {
@@ -50,12 +51,13 @@ public abstract class App : MonoBehaviour {
     }
     public void activate() {
         // actievate(initialize) the app
-        // show icon, print some output if needed
         activated = true;
+        icon.SetActive (true);
+        notified ();
     }
     public void clicked() {
         if (pcPlayer.isCurrentApp (this)) {
-            hide ();
+            pcPlayer.hideCurrentApp ();
         }
         else {
             pcPlayer.showInMainScreen (this);

@@ -43,7 +43,7 @@ public class VrPlayer : MonoBehaviour {
         // get camera views
         if (cameraSystem.isTurnedOn ()) {
             if (Time.time - prvTime >= refreshTime) {
-                Sprite[] images = cameraSystem.getImage ();
+                Texture2D[] images = cameraSystem.getImage ();
                 for(int i = 0; i < images.Length; i++) {
                     send ("camera " + i, images[i]);
                 }
@@ -52,20 +52,34 @@ public class VrPlayer : MonoBehaviour {
         }
 	}
 
+    public void setBridge(NetworkBridge brdg) {
+        bridge = brdg;
+    }
     public void send(string type, string content) {
         bridge.CmdSendToPcStr(type, content);
     }
-    public void send(string type, Sprite content) {
+    public void send(string type, Texture content) {
         //bridge.CmdSendToPcImg(type, content);
     }
     public void receive(string type, string content) {
-        Debug.Log ("VR received");
 
         switch (type) {
         case "camera":
             if (content == "on") {
                 cameraSystem.turnOn ();
                 prvTime = Time.time;
+            }
+            break;
+        case "elevator":
+            string[] ops = content.Split (' ');
+            int floorNum;
+            if (ops.Length == 2 && ops [0] == "floor" && int.TryParse(ops[1], out floorNum)) {
+                if (floorNum == 4) {
+                    GameObject.Find ("ElevatorDoor").SetActive(false);
+                }
+            } 
+            else {
+                Debug.Log ("wrong msg! - " + type + "/" + content);
             }
             break;
         }
