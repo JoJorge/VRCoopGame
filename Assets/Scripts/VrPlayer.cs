@@ -4,9 +4,11 @@ using UnityEngine;
 
 public class VrPlayer : MonoBehaviour {
 
+    private TouchUI touchUI; 
     private List<Item> itemList;
     private Item itemOnHand;
     private CameraSystem cameraSystem;
+    private double thresholdAngle = -25;
     private static VrPlayer instance;
 
     public static VrPlayer getInstance() {
@@ -20,25 +22,36 @@ public class VrPlayer : MonoBehaviour {
         if (getInstance () != this) {
             Destroy (this);
         }
+        touchUI = GameObject.Find("Canvas").GetComponent<TouchUI>();
         itemList = new List<Item>();
         cameraSystem = GameObject.Find ("CameraSystem").GetComponent<CameraSystem>();
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		// TODO
-	}
 
+    // Update is called once per frame
+    void Update() {
+        double x = Camera.main.transform.eulerAngles.x;
+        // let the angle between -180 to 180
+        if (x > 180) { x = x - 360.0; }
+        if (touchUI.getIsDisplayed() == false && x <= thresholdAngle && GvrViewer.Instance.Triggered)
+        {
+            touchUI.DisplayUI(x,3); // the number 3 is for temp test, need to be fix
+        }
+    }
     public void send(string type, string content) {
     }
     public void send(string type, Sprite content) {
     }
     public void receive(string type, string content) {
     }
+    // Autowalk.cs provides the behavior 
+    /*
     private void walk() {
+
     }
+    
     private void stop() {
     }
+    */
     private void pick(Item item) {
         itemList.Add (item);
         item.gameObject.transform.SetParent(transform);
@@ -65,5 +78,6 @@ public class VrPlayer : MonoBehaviour {
     private void showItemList() {
     }
     public void hideItemList() {
+        touchUI.disableUI();
     }
 }
