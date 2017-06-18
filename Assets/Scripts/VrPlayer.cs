@@ -28,7 +28,7 @@ public class VrPlayer : MonoBehaviour {
         bridge = FindObjectOfType (typeof(NetworkBridge)) as NetworkBridge;
         touchUI = GameObject.Find("Canvas").GetComponent<TouchUI>();
         itemList = new List<Item>();
-        cameraSystem = GameObject.Find ("CameraSystem").GetComponent<CameraSystem>();
+        // cameraSystem = GameObject.Find ("CameraSystem").GetComponent<CameraSystem>();
 	}
 	
 	// Update is called once per frame
@@ -37,9 +37,9 @@ public class VrPlayer : MonoBehaviour {
         // let the angle between -180 to 180
         if (x > 180) { x = x - 360.0; }
         if (touchUI.getIsDisplayed() == false && x <= thresholdAngle && GvrViewer.Instance.Triggered) {
-            touchUI.DisplayUI(x, 3); // the number 3 is for temp test, need to be fix
+            touchUI.DisplayUI(x, itemList); // the number 3 is for temp test, need to be fix
         }
-
+        /*
         // get camera views
         if (cameraSystem.isTurnedOn ()) {
             if (Time.time - prvTime >= refreshTime) {
@@ -50,6 +50,7 @@ public class VrPlayer : MonoBehaviour {
                 prvTime = Time.time;
             }
         }
+        */
 	}
 
     public void setBridge(NetworkBridge brdg) {
@@ -61,6 +62,7 @@ public class VrPlayer : MonoBehaviour {
     public void send(string type, Texture content) {
         //bridge.CmdSendToPcImg(type, content);
     }
+    /*
     public void receive(string type, string content) {
 
         switch (type) {
@@ -84,6 +86,7 @@ public class VrPlayer : MonoBehaviour {
             break;
         }
     }
+    */
     // Autowalk.cs provides the behavior 
     /*
     private void walk() {

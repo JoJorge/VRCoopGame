@@ -8,6 +8,8 @@ public class Terminal : App {
 	[SerializeField]
 	private GameObject input;
 	[SerializeField]
+	private GameObject screen_input;
+	[SerializeField]
 	private InputField inputfield;
 	[SerializeField]
 	private Text screen;
@@ -41,6 +43,9 @@ public class Terminal : App {
 				}
 				now_line = now_line - delete_line_num;
 			}
+			if (echo == "clean") {
+				screen.text = "";
+			}
 		}
 	}
 	//just refresh InputField text
@@ -69,11 +74,10 @@ public class Terminal : App {
             echo = "Camera is on now.";
             now_line = now_line + 2;
         }
-        else if (command == "test\n") {
-            echo = "testing.";
-            now_line = now_line + 2;
-            send ("test", "yee");
-        }
+		} else if (command == "cls\n") {
+			now_line = 0;
+			echo = "clean";
+		}
 		else
 		{
 			echo = "Command does not exist.";
