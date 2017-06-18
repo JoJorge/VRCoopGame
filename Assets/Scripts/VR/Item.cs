@@ -4,6 +4,7 @@ using UnityEngine;
 
 public abstract class Item : MonoBehaviour {
 
+    public Sprite icon;
     protected bool pickable;
     protected Dictionary<GameObject, UseStrategy> interactingItems;
     protected VrPlayer vrPlayer;
