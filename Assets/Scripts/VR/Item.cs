@@ -24,6 +24,9 @@ public abstract class Item : MonoBehaviour {
     public bool isPickable() {
         return pickable;
     }
+    public void setPickable(bool flag) {
+        pickable = flag;
+    }
     public void use(GameObject obj) {
         if (interactingItems.ContainsKey (obj)) {
             UseStrategy st = interactingItems [obj];

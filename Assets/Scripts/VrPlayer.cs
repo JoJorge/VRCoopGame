@@ -88,27 +88,25 @@ public class VrPlayer : MonoBehaviour {
             break;
         }
     }
-
-    // Autowalk.cs provides the behavior 
-    /*
-    private void walk() {
-
-    }
-    
-    private void stop() {
-    }
-    */
     public void pick(Item item) {
         itemList.Add (item);
-        item.gameObject.transform.SetParent(transform);
+        item.gameObject.transform.SetParent(Camera.main.transform);
         item.gameObject.SetActive (false);
         item.transform.localPosition = Vector3.zero;
+    }
+    public void drop(Item item) {
+        if (itemOnHand == item) {
+            unhold ();
+        }
+        itemList.Remove (item);
+        item.gameObject.SetActive (true);
+        item.transform.SetParent (null);
     }
     public void hold(Item item) {
         unhold ();
         itemOnHand = item;
         item.gameObject.SetActive (true);
-        item.transform.localPosition = new Vector3(0.3f, 0.2f, 0.5f);
+        item.transform.localPosition = new Vector3(0.3f, -0.3f, 0.5f);
     }
     public void unhold() {
         if (itemOnHand) {

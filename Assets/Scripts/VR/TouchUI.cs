@@ -12,17 +12,18 @@ public class TouchUI : MonoBehaviour {
     private double thresholdAngle = -10 ;
     public Transform reference = null;
     public Sprite unavailable = null; 
-    public List<string> listOfBtn;
+    public List<Button> listOfBtn;
 
 
 
     // Use this for initialization
     void Start () {
         mainCamera = Camera.main.transform;
-        listOfBtn.Add("ButtonLT");
-        listOfBtn.Add("ButtonRT");
-        listOfBtn.Add("ButtonLD");
-        listOfBtn.Add("ButtonRD");
+        listOfBtn.Add(GameObject.Find("ButtonLT").GetComponent<Button>());
+        listOfBtn.Add(GameObject.Find("ButtonRT").GetComponent<Button>());
+        listOfBtn.Add(GameObject.Find("ButtonLD").GetComponent<Button>());
+        listOfBtn.Add(GameObject.Find("ButtonRD").GetComponent<Button>());
+        transform.Find("ButtonCollection").gameObject.SetActive(false);
     }
     // Update is called once per frame
     void Update()  {
@@ -39,17 +40,17 @@ public class TouchUI : MonoBehaviour {
             for (int i = 0; i < 4; i++) {
                 if (i < itemList.Count) {
                     changeIamge(itemList[i].icon, listOfBtn[i]);
-                    Button btn = GameObject.Find (listOfBtn [i]).GetComponent<Button> ();
+                    Button btn = listOfBtn [i];
                     btn.onClick.RemoveAllListeners ();
+                    int tmpInt = i;
                     btn.onClick.AddListener(() => {VrPlayer.getInstance().hideItemList();});
-                    btn.onClick.AddListener (() => {VrPlayer.getInstance().hold(itemList[i]);});
+                    btn.onClick.AddListener (() => { VrPlayer.getInstance().hold(itemList[tmpInt]); });
                 }
                 else {
                     changeIamge(unavailable, listOfBtn[i]);
                 }
             }
             isDisplayed = true;
-            Debug.Log("UI Active");
            
             // get the orient and pos from reference
             Quaternion ori = Quaternion.Euler(reference.rotation.eulerAngles);
@@ -59,12 +60,10 @@ public class TouchUI : MonoBehaviour {
     }
     public void disableUI() {
         isDisplayed = false;
-        Debug.Log("UI Not Active");
         transform.Find("ButtonCollection").gameObject.SetActive(false);
     }
-    private void changeIamge(Sprite newSprite, string btnName) {
-        Debug.Log(btnName);
-        Image theImage = GameObject.Find(btnName).GetComponent<Image>();
+    private void changeIamge(Sprite newSprite, Button btn) {
+        Image theImage = btn.GetComponent<Image>();
         theImage.sprite = newSprite;
     }
 

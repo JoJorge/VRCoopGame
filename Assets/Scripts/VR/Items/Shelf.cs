@@ -6,8 +6,9 @@ public class Shelf : Item {
 
     public override void interact () {
         if (transform.childCount == 0) {
-            // TODO 
-            // push the shelf aside
+            Vector3 pos = transform.localPosition;
+            pos.x = -0.01f;
+            transform.localPosition = pos;
         }
     }
 }
