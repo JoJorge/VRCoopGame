@@ -39,6 +39,10 @@ public class TouchUI : MonoBehaviour {
             for (int i = 0; i < 4; i++) {
                 if (i < itemList.Count) {
                     changeIamge(itemList[i].icon, listOfBtn[i]);
+                    Button btn = GameObject.Find (listOfBtn [i]).GetComponent<Button> ();
+                    btn.onClick.RemoveAllListeners ();
+                    btn.onClick.AddListener(() => {VrPlayer.getInstance().hideItemList();});
+                    btn.onClick.AddListener (() => {VrPlayer.getInstance().hold(itemList[i]);});
                 }
                 else {
                     changeIamge(unavailable, listOfBtn[i]);

@@ -28,7 +28,9 @@ public class VrPlayer : MonoBehaviour {
         bridge = FindObjectOfType (typeof(NetworkBridge)) as NetworkBridge;
         touchUI = GameObject.Find("Canvas").GetComponent<TouchUI>();
         itemList = new List<Item>();
-        // cameraSystem = GameObject.Find ("CameraSystem").GetComponent<CameraSystem>();
+        pick(GameObject.Find("Toolbox").GetComponent<Item>());
+        pick(GameObject.Find("HackingDevice").GetComponent<Item>());
+        cameraSystem = GameObject.Find ("CameraSystem").GetComponent<CameraSystem>();
 	}
 	
 	// Update is called once per frame
@@ -62,7 +64,7 @@ public class VrPlayer : MonoBehaviour {
     public void send(string type, Texture content) {
         //bridge.CmdSendToPcImg(type, content);
     }
-    /*
+
     public void receive(string type, string content) {
 
         switch (type) {
@@ -86,7 +88,7 @@ public class VrPlayer : MonoBehaviour {
             break;
         }
     }
-    */
+
     // Autowalk.cs provides the behavior 
     /*
     private void walk() {
@@ -102,8 +104,17 @@ public class VrPlayer : MonoBehaviour {
         item.gameObject.SetActive (false);
         item.transform.localPosition = Vector3.zero;
     }
-    private void hold(Item item) {
+    public void hold(Item item) {
+        unhold ();
         itemOnHand = item;
+        item.gameObject.SetActive (true);
+        item.transform.localPosition = new Vector3(0.3f, 0.2f, 0.5f);
+    }
+    public void unhold() {
+        if (itemOnHand) {
+            itemOnHand.gameObject.SetActive (false);
+            itemOnHand = null;
+        }
     }
     public void interact(GameObject obj) {
         if (itemOnHand != null) {

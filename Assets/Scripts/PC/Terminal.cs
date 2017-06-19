@@ -74,7 +74,7 @@ public class Terminal : App {
             echo = "Camera is on now.";
             now_line = now_line + 2;
         }
-		} else if (command == "cls\n") {
+		else if (command == "cls\n") {
 			now_line = 0;
 			echo = "clean";
 		}
