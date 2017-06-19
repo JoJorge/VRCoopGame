@@ -30,7 +30,9 @@ public class VrPlayer : MonoBehaviour {
         itemList = new List<Item>();
         pick(GameObject.Find("Toolbox").GetComponent<Item>());
         pick(GameObject.Find("HackingDevice").GetComponent<Item>());
-        cameraSystem = GameObject.Find ("CameraSystem").GetComponent<CameraSystem>();
+        // cameraSystem = GameObject.Find ("CameraSystem").GetComponent<CameraSystem>();
+
+        
     }
 	
 	// Update is called once per frame
@@ -53,13 +55,13 @@ public class VrPlayer : MonoBehaviour {
             }
         }
         */
-	}
+    }
 
     public void setBridge(NetworkBridge brdg) {
         bridge = brdg;
     }
     public void send(string type, string content) {
-        bridge.CmdSendToPcStr(type, content);
+        bridge.sendToStr(type, content);
     }
     public void send(string type, Texture content) {
         //bridge.CmdSendToPcImg(type, content);

@@ -55,11 +55,20 @@ public class PcPlayer : MonoBehaviour {
         bridge.RpcSendToVr(type, content);
     }
     public void receive<T>(string type, T content) {
+        Debug.Log(type + "/" + content);
 
         // receive message from VrPlayer
-        int idx = type.IndexOf(" ");    
-        string typeName = type.Substring(0, idx);
-        string header = type.Substring (idx+1);
+        string typeName;
+        string header;
+        if (type.Contains(" ")) {
+            int idx = type.IndexOf(" ");
+            typeName = type.Substring(0, idx);
+            header = type.Substring(idx + 1);
+        }
+        else {
+            typeName = type;
+            header = "";
+        }
         if (typeName == "hack") {
             App trml = findAppByName ("Terminal");
             if (trml.isActivated () == false) {

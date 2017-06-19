@@ -21,7 +21,10 @@ public class HackingStrategy : UseStrategy {
         Quaternion rot = device.transform.localRotation;
         rot.eulerAngles = placeRot;
         device.transform.rotation = rot;
-        VrPlayer.getInstance ().send ("hack", obj.name);
+        if (obj.name == "ElevatorPanel")
+            VrPlayer.getInstance().send("hack", "elevator");
+        else
+            VrPlayer.getInstance ().send ("hack", obj.name);
         if (obj.name == "CameraSystem") {
             device.setPickable (false);
         }

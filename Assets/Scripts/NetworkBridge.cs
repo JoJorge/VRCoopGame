@@ -19,6 +19,14 @@ public class NetworkBridge : NetworkBehaviour {
             vrPlayer.setBridge (this);
         }
     }
+    public void sendToStr(string type, string content) {
+        if (isLocalPlayer) {
+            CmdSendToPcStr(type, content);
+        }
+        else {
+            Debug.Log("not a local player !");
+        }
+    }
     [Command]
     public void CmdSendToPcStr(string type, string content) {
         pcPlayer.receive (type, content);

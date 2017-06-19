@@ -106,7 +106,7 @@ public class Terminal : App {
 			if (parts.Length == 3) {
 				parts [2] = parts [2].Remove (parts [2].Length - 1);
 				echo ="Evelator goto floor "+parts[2]+" successfully";
-				send ("evelator", "goto " + parts [2]);
+				send ("elevator", "floor " + parts [2]);
 			} else {
 				echo = "Evelator command: goto floor #floor_num\n";
 			}
@@ -128,13 +128,11 @@ public class Terminal : App {
 	{
 		base.output (header, content);
 		var parts = content.Split (' ');
-		parts [0] = parts [0].Remove (parts [0].Length - 1);
-		parts [1] = parts [1].Remove (parts [1].Length - 1);
-		if (parts [0] == "hack") {
+        if (parts [0] == "hack") {
 			screen.text = screen.text + "Congraduation! VrPlayer has hacked " + parts[1] +" !\n";
-			if (parts [1] == "evelator") {
+			if (parts [1] == "elevator") {
 				hacklist [1] = 1;
-			}
+            }
 			if (parts [1] == "camera_system") {
 				hacklist [3] = 1;
 			}

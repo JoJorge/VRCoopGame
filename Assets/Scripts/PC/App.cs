@@ -5,7 +5,7 @@ using UnityEngine;
 public abstract class App : MonoBehaviour {
 
     [SerializeField]
-    private GameObject icon;
+    protected GameObject icon;
 	[SerializeField]
     private GameObject window;
     private PcPlayer pcPlayer;
