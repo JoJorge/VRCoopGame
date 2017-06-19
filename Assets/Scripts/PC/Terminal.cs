@@ -15,12 +15,20 @@ public class Terminal : App {
 	private Text screen;
 	[SerializeField]
 	private int now_line = 0;
+	[SerializeField]
+	private int[] hacklist;
+	[SerializeField]
+	private int debug;
+
 
 	// Use this for initialization
     override public void Start() {
         input = transform.Find ("Terminal_window").gameObject;
         inputfield = input.GetComponentInChildren<InputField> ();
-        screen = GameObject.Find ("screen").GetComponent <UnityEngine.UI.Text>();
+		screen = input.GetComponentInChildren<Text> ();
+		hacklist = new int[4];
+		hacklist [0] = 1;
+		hacklist [2] = 1;
         base.Start ();
     }
 		
@@ -35,7 +43,7 @@ public class Terminal : App {
 	void get_command(string command){
 		if (command != "\n") {
 			string echo = command_handler (command);
-			screen.text = screen.text + "user@hack:-$ " + command + echo + "\n";
+			screen.text = screen.text + "user@hack:-$ " + command + echo;
 			if (now_line >= 12) {
 				int delete_line_num = now_line - 12;
 				for (int i = 0; i < delete_line_num; i++) {
@@ -43,7 +51,7 @@ public class Terminal : App {
 				}
 				now_line = now_line - delete_line_num;
 			}
-			if (echo == "clean") {
+			if (echo == "clean\n") {
 				screen.text = "";
 			}
 		}
@@ -55,34 +63,81 @@ public class Terminal : App {
 	}
 	//handle all command
 	string command_handler(string command){
-		string echo;
-        if (command == "help\n") {
-            echo = "Common:\n" +
-            "\t\thelp -list all command and some information.\n" +
-            "\t\texit -just exit.\n" +
-            "\t\tEvelator:\n" +
-            "\t\tgoto floor #floor_num\n" +
-            "mail list:\n" +
-            "\t\tmail open ;mailname\n" +
-            "camera system\n" +
-            "\t\tcamera on\n" +
-            "\t\tls\n" +
-            "\t\topen ;filename";
-            now_line = now_line + 12;
-        }
-        else if (command == "camera on\n") {
-            echo = "Camera is on now.";
-            now_line = now_line + 2;
-        }
+		
+		string echo = "";
+		string[] help_command;
+		int[] help_line;
+		help_command = new string[4];
+		help_line = new int[4];
+
+		help_command[0] = "Common:\n" +
+			"\t\thelp -list all command and some information.\n" +
+			"\t\texit -just exit.\n";
+		help_command[1] = "\t\tEvelator:\n" +
+			"\t\tgoto floor #floor_num\n";
+		help_command[2] = "mail list:\n" +
+			"\t\tmail open ;mailname\n";
+		help_command[3] = "camera system\n" +
+			"\t\tcamera on\n" +
+			"\t\tls\n" +
+			"\t\topen ;filename\n";
+		
+		help_line [0] = 3;
+		help_line [1] = 2;
+		help_line [2] = 2;
+		help_line [3] = 4;
+
+		if (command == "help\n") {
+			int temp_line = 0;
+			for(int i=0;i<4;i++){
+				if(hacklist[i]==1){
+					temp_line = temp_line + help_line[i];
+					echo = echo + help_command[i];
+				}
+			}
+			now_line = now_line + temp_line + 1;
+		} else if (command == "camera on\n") {
+			send ("camera", "on");
+			echo = "camera is on now.\n";
+			now_line = now_line + 2;
+		} else if ((debug = command.IndexOf ("goto floor"))==0) 
+		{
+			var parts = command.Split (' ');
+			if (parts.Length == 3) {
+				parts [2] = parts [2].Remove (parts [2].Length - 1);
+				echo ="Evelator goto floor "+parts[2]+" successfully";
+				send ("evelator", "goto " + parts [2]);
+			} else {
+				echo = "Evelator command: goto floor #floor_num\n";
+			}
+			now_line = now_line + 2;
+		}
 		else if (command == "cls\n") {
 			now_line = 0;
-			echo = "clean";
+			echo = "clean\n";
 		}
 		else
 		{
-			echo = "Command does not exist.";
+			echo = "Command does not exist.\n";
 			now_line = now_line + 2;
 		}
 		return echo;
+	}
+
+	protected override void output (string header, string content)
+	{
+		base.output (header, content);
+		var parts = content.Split (' ');
+		parts [0] = parts [0].Remove (parts [0].Length - 1);
+		parts [1] = parts [1].Remove (parts [1].Length - 1);
+		if (parts [0] == "hack") {
+			screen.text = screen.text + "Congraduation! VrPlayer has hacked " + parts[1] +" !\n";
+			if (parts [1] == "evelator") {
+				hacklist [1] = 1;
+			}
+			if (parts [1] == "camera_system") {
+				hacklist [3] = 1;
+			}
+		}
 	}
 }
