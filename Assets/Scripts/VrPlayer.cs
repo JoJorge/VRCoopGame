@@ -31,7 +31,7 @@ public class VrPlayer : MonoBehaviour {
         pick(GameObject.Find("Toolbox").GetComponent<Item>());
         pick(GameObject.Find("HackingDevice").GetComponent<Item>());
         cameraSystem = GameObject.Find ("CameraSystem").GetComponent<CameraSystem>();
-	}
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -79,7 +79,7 @@ public class VrPlayer : MonoBehaviour {
             int floorNum;
             if (ops.Length == 2 && ops [0] == "floor" && int.TryParse(ops[1], out floorNum)) {
                 if (floorNum == 4) {
-                    GameObject.Find ("ElevatorDoor").SetActive(false);
+                    StartCoroutine(GameObject.Find ("ElevatorDoor").GetComponent<ElevatorDoor>().openDoor());
                 }
             } 
             else {
@@ -115,6 +115,7 @@ public class VrPlayer : MonoBehaviour {
         }
     }
     public void interact(GameObject obj) {
+        Debug.Log(obj.name);
         if (itemOnHand != null) {
             itemOnHand.use (obj);
         }

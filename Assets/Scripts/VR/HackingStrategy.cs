@@ -16,7 +16,8 @@ public class HackingStrategy : UseStrategy {
 
     public void use(GameObject obj) {
         VrPlayer.getInstance ().drop (device);
-        device.transform.position = placePos;
+        device.transform.parent = obj.transform;
+        device.transform.localPosition = placePos;
         Quaternion rot = device.transform.localRotation;
         rot.eulerAngles = placeRot;
         device.transform.rotation = rot;

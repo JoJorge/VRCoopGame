@@ -4,5 +4,6 @@ using UnityEngine;
 
 public class OpenPanelStrategy : UseStrategy {
     public void use(GameObject obj) {
+        Object.Destroy(obj);
     }
 }
